@@ -2,7 +2,12 @@ package com.springrest.springrest.ServiceImpl;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import  java.util.stream.*;
+import org.json.*;
+
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -27,21 +32,36 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 	public List<CryptoCoin> getCoins() {	
 		
 		try {
-			JsonObject jsonResponse = getJsonResponse("coins");
+			JSONObject jsonResponse = getJsonResponse("coins");
 			List<CryptoCoin> outList = new ArrayList<CryptoCoin>();
 		    if(jsonResponse != null) {
-				JsonArray coinsArray = jsonResponse.getAsJsonArray("coins");
+		    	JSONArray coinsArray = jsonResponse.getJSONArray("coins"); 
+		    	
+		    	outList = coinsArray.toList().stream()
+		    			.map(j -> (HashMap<String,Object>)j)
+		    			.filter(j -> j.get("symbol").toString().startsWith("B"))
+		    			.map(j -> {
+							CryptoCoin cryptoCoin = new CryptoCoin();
+							cryptoCoin.setId(Integer.parseInt(j.get("id").toString()));
+							cryptoCoin.setName(j.get("name").toString());
+							cryptoCoin.setSymbol(j.get("symbol").toString());
+							cryptoCoin.setVolume(Long.parseLong(j.get("volume").toString()));
+							cryptoCoin.setPrice(new BigDecimal(j.get("price").toString()));
+							return cryptoCoin;
+
+		    			})
+		    			.collect(Collectors.toList());
 				
-				coinsArray.forEach((coin) -> {
-					JsonObject coin1 = (JsonObject)coin;
-					CryptoCoin cryptoCoin = new CryptoCoin();
-					cryptoCoin.setId(coin1.get("id").getAsInt());
-					cryptoCoin.setName(coin1.get("name").getAsString());
-					cryptoCoin.setSymbol(coin1.get("symbol").getAsString());
-					cryptoCoin.setVolume(coin1.get("volume").getAsLong());
-					cryptoCoin.setPrice(new BigDecimal(coin1.get("price").getAsString()));	
-					outList.add(cryptoCoin);
-				});
+//				coinsArray.forEach((coin) -> {
+//					JSONObject coin1 = (JSONObject)coin;
+//					CryptoCoin cryptoCoin = new CryptoCoin();
+//					cryptoCoin.setId(coin1.getInt("id"));
+//					cryptoCoin.setName(coin1.getString("name"));
+//					cryptoCoin.setSymbol(coin1.getString("symbol"));
+//					cryptoCoin.setVolume(coin1.getLong("volume"));
+//					cryptoCoin.setPrice(new BigDecimal(coin1.getString("price")));	
+//					outList.add(cryptoCoin);
+//				});
 				
 				return outList;
 		    }
@@ -56,17 +76,17 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 	@Override
 	public CryptoCoin getCoinDetails(int coinId) {
 		try {
-			JsonObject jsonResponse = getJsonResponse("coin/"+coinId);
+			JSONObject jsonResponse = getJsonResponse("coin/"+coinId);
 			CryptoCoin cryptoCoin = null;
 		    if(jsonResponse != null) {
-		    	JsonObject coinObject = jsonResponse.getAsJsonObject("coin");
+		    	JSONObject coinObject = jsonResponse.getJSONObject("coin");
 		    	
 				cryptoCoin = new CryptoCoin();
-				cryptoCoin.setId(coinObject.get("id").getAsInt());
-				cryptoCoin.setName(coinObject.get("name").getAsString());
-				cryptoCoin.setSymbol(coinObject.get("symbol").getAsString());
-				cryptoCoin.setVolume(coinObject.get("volume").getAsLong());
-				cryptoCoin.setPrice(new BigDecimal(coinObject.get("price").getAsString()));	
+				cryptoCoin.setId(coinObject.getInt("id"));
+				cryptoCoin.setName(coinObject.getString("name"));
+				cryptoCoin.setSymbol(coinObject.getString("symbol"));
+				cryptoCoin.setVolume(coinObject.getLong("volume"));
+				cryptoCoin.setPrice(new BigDecimal(coinObject.getString("price")));	
 			
 				return cryptoCoin;
 		    }
@@ -78,15 +98,15 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 		}
 	}
 	
-	private JsonObject getJsonResponse(String uri){
+	private JSONObject getJsonResponse(String uri){
 		try {
 			
 			CryptoCoinsProvider cryptoCoinsProvider = CryptoCoinsProvider.getUserVoteProvider();
 		    ResponseEntity<String> response = cryptoCoinsProvider.getRestTemplate()
 		    									.exchange(baseUrl+uri, HttpMethod.GET, cryptoCoinsProvider.getHeaderEntity(), String.class);
 		    if(response.getStatusCodeValue() == 200) {
-		    	JsonObject jsonBody = new JsonParser().parse(response.getBody()).getAsJsonObject();
-		    	JsonObject jsonData = jsonBody.getAsJsonObject("data");
+		    	JSONObject jsonBody = new JSONObject(response.getBody());
+		    	JSONObject jsonData = jsonBody.getJSONObject("data");
 		    	return jsonData;
 		    }else {
 		    	return null;
