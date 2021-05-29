@@ -1,19 +1,11 @@
 package com.springrest.springrest.Contollers;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.apache.catalina.webresources.EmptyResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springrest.springrest.Models.CryptoCoin;
@@ -48,6 +40,8 @@ public class CryptoCoinController {
 	@GetMapping(value = "cryptocoins/getCoinDetails/{coinId}", produces = "application/JSON")
 	ResponseEntity<CryptoCoin> getCoinDetails(@PathVariable int coinId) {
 		try {
+				if(coinId <= 0 || coinId > 9) return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+				
 				CryptoCoin output = cryptoCoinService.getCoinDetails(coinId);
 			
 			if(output != null)
