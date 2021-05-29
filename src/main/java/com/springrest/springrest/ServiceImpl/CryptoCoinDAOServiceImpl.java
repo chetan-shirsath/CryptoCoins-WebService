@@ -1,13 +1,10 @@
 package com.springrest.springrest.ServiceImpl;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import  java.util.stream.*;
 import org.json.*;
-
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -15,9 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.springrest.springrest.Models.CryptoCoin;
 import com.springrest.springrest.Services.CryptoCoinDAOService;
 import com.springrest.springrest.UtilClass.CryptoCoinsProvider;
@@ -39,7 +33,7 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 		    	
 		    	outList = coinsArray.toList().stream()
 		    			.map(j -> (HashMap<String,Object>)j)
-		    			.filter(j -> j.get("symbol").toString().startsWith("B"))
+		    			.filter(j -> (Integer)(j.get("id")) == 1 || (Integer)(j.get("id")) == 4 || (Integer)(j.get("id")) == 7 || (Integer)(j.get("id")) == 8)
 		    			.map(j -> {
 							CryptoCoin cryptoCoin = new CryptoCoin();
 							cryptoCoin.setId(Integer.parseInt(j.get("id").toString()));
@@ -51,17 +45,6 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 
 		    			})
 		    			.collect(Collectors.toList());
-				
-//				coinsArray.forEach((coin) -> {
-//					JSONObject coin1 = (JSONObject)coin;
-//					CryptoCoin cryptoCoin = new CryptoCoin();
-//					cryptoCoin.setId(coin1.getInt("id"));
-//					cryptoCoin.setName(coin1.getString("name"));
-//					cryptoCoin.setSymbol(coin1.getString("symbol"));
-//					cryptoCoin.setVolume(coin1.getLong("volume"));
-//					cryptoCoin.setPrice(new BigDecimal(coin1.getString("price")));	
-//					outList.add(cryptoCoin);
-//				});
 				
 				return outList;
 		    }

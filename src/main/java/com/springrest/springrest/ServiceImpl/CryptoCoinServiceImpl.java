@@ -1,13 +1,10 @@
 package com.springrest.springrest.ServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-//import com.springrest.springrest.Services.IVoteDAO;
 import com.springrest.springrest.Models.CryptoCoin;
 import com.springrest.springrest.Services.CryptoCoinService;
 import com.springrest.springrest.Services.CryptoCoinDAOService;
