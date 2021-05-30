@@ -12,6 +12,7 @@
 	<artifactId>springrest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springrest</name>
+	<packaging>war</packaging>
 	<description>REST API for Crypto Coins</description>
 	<properties>
 		<java.version>1.8</java.version>
