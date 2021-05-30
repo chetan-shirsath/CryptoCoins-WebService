@@ -1,0 +1,8 @@
+com\springrest\springrest\Contollers\CryptoCoinController.class
+com\springrest\springrest\SpringrestApplication.class
+com\springrest\springrest\ServiceImpl\CryptoCoinServiceImpl.class
+com\springrest\springrest\UtilClass\CryptoCoinsProvider.class
+com\springrest\springrest\Services\CryptoCoinService.class
+com\springrest\springrest\ServiceImpl\CryptoCoinDAOServiceImpl.class
+com\springrest\springrest\Services\CryptoCoinDAOService.class
+com\springrest\springrest\Models\CryptoCoin.class
