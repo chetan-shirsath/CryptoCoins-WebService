@@ -33,7 +33,7 @@ public class CryptoCoinDAOServiceImpl implements CryptoCoinDAOService{
 		    	
 		    	outList = coinsArray.toList().stream()
 		    			.map(j -> (HashMap<String,Object>)j)
-		    			.filter(j -> (Integer)(j.get("id")) == 1 || (Integer)(j.get("id")) == 4 || (Integer)(j.get("id")) == 7 || (Integer)(j.get("id")) == 8)
+//		    			.filter(j -> (Integer)(j.get("id")) == 1 || (Integer)(j.get("id")) == 4 || (Integer)(j.get("id")) == 7 || (Integer)(j.get("id")) == 8)
 		    			.map(j -> {
 							CryptoCoin cryptoCoin = new CryptoCoin();
 							cryptoCoin.setId(Integer.parseInt(j.get("id").toString()));
